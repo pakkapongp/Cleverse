@@ -20,11 +20,13 @@ export class FlightLogService {
     },
   ];
 
+  
   getLogs() {
-    return new Promise(function (resolve) {
-      setTimeout(function () {
+    return new Promise( (resolve,reject) => {
+      setTimeout(()=> {
+        
         resolve(this.initialData || []);
-      }, 2000);
+      }, 1000);
     });
   }
 }
