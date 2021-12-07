@@ -14,8 +14,8 @@ export default function Home() {
 
   const handleAddLog = useCallback(
     (log) => {
-      logs.push(log);
-      setLogs(logs);
+      let temp = logs.concat(log)
+      setLogs(temp);
     },
     [logs]
   );
