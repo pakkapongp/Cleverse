@@ -11,7 +11,33 @@ const flightLogService = new FlightLogService();
 
 export default function Home() {
   const [logs, setLogs] = useState([]);
-
+  const printavg = () =>{
+    let key = []
+    let value = []
+    let avg = {}
+    logs.forEach(e =>{
+      if(!key.includes(e.passengerName)){
+        key.push(e.passengerName)
+        value.push(e)
+      }else{
+        if(e.type === "arrival"){
+          let i = value.findIndex(p => {
+            return p.passengerName === e.passengerName && p.type === "departure"
+          })
+          let data = value.splice(i,1)
+          key.splice(i,1)
+          let k = data[0].airport + " to " + e.airport;
+          let deltatime = e.timestamp - data[0].timestamp;
+          avg[k] = avg[k] ? avg[k] : []
+          avg[k].push(deltatime)
+        }
+      }
+    })
+    for (const value in avg){
+      console.log(value,":",avg[value].reduce((a,b)=>a+b,0)/avg[value].length)
+    }
+   
+  }
   const handleAddLog = useCallback(
     (log) => {
       let temp = logs.concat(log)
@@ -49,6 +75,7 @@ export default function Home() {
           <h2>Flight Logs</h2>
           <LogCard style={{ width: "100%" }} data={logs}></LogCard>
         </div>
+        <button onClick= {printavg}>Print avg time to console</button>
         <div className={styles.card} style={{ margin: 16, width: "100%" }}>
           <h2>Departure Logging</h2>
           <LogForm
